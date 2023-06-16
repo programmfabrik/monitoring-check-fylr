@@ -17,23 +17,23 @@ first(){ # first function called
     answer_nagios
 }
 
-call_url(){ # send http request to easydb5
+call_url(){ # send http request to fylr
     TIMESTART=`date +%s`
     RESPONSE=`wget "$URL" -t 1 -S -q --no-cache --no-check-certificate -O - 2>&1`
     TIMESTOP=`date +%s`
 }
 
-analyze_response(){ # process answer from easydb5
+analyze_response(){ # process answer from fylr
 
     # analyze response duration
     TIME_TAKEN=$(($TIMESTOP-$TIMESTART))
     STATS="${STATS} Roundtrip=$TIME_TAKEN"
     if [ $TIME_TAKEN -lt $WARN_TIMEOUT ] ; then
-        EXIT=0; NOTES="$NOTES easydb responded faster than $WARN_TIMEOUT seconds."
+        EXIT=0; NOTES="$NOTES fylr responded faster than $WARN_TIMEOUT seconds."
     elif [ $TIME_TAKEN -lt $CRIT_TIMEOUT ] ; then
-        EXIT=1; ERRORS="$ERRORS easydb responded slower that $WARN_TIMEOUT seconds."
+        EXIT=1; ERRORS="$ERRORS fylr responded slower that $WARN_TIMEOUT seconds."
     else
-        EXIT=2; ERRORS="$ERRORS easydb did not respond in $CRIT_TIMEOUT seconds."
+        EXIT=2; ERRORS="$ERRORS fylr did not respond in $CRIT_TIMEOUT seconds."
     fi
 
     # analyze http-status
@@ -58,35 +58,6 @@ analyze_response(){ # process answer from easydb5
         EXIT=2
         ERRORS="$ERRORS Did not find $SEARCH_STRING in answer!"
     fi
-
-    # a typical response:
-     
-    #  HTTP/1.1 200 OK
-    #  Date: Sun, 31 Dec 2017, 23:59:59 GMT
-    #  Server: nginx/1.6.2
-    #  Content-Type: application/json; charset=utf-8
-    #  Vary: Accept-Encoding,Origin
-    #  Cache-Control: no-cache
-    #  Last-Modified: Sun, 31 Dec 2017, 23:59:59 GMT
-    #  X-Easydb-API-Version: 1
-    #  X-Easydb-User-Schema-Version: 42
-    #  Pragma: no-cache
-    #  X-Easydb-Solution: base
-    #  X-Easydb-Base-Schema-Version: 179
-    #  Keep-Alive: timeout=5, max=100
-    #  Connection: Keep-Alive
-    #  Transfer-Encoding: chunked
-    #{
-    #    "name": "ffffffff-ffff-ffff-ffff-ffffffffffff",
-    #    "api": 1,
-    #    "server_version": 1,
-    #    "user-schema": 99,
-    #    "solution": "base",
-    #    "db-name": "easy5-uni-atlantis",
-    #    "startup_time": "2017-01-31T01:59:59Z",
-    #    "external_eas_url": "http://easydb.uni-atlantis.de/eas",
-    #    "server_time": "2017-12-31T23:59:59Z"
-    #}
 }
 
 options(){ # process command line parameters
@@ -97,7 +68,7 @@ options(){ # process command line parameters
     # defaults:
     WARN_TIMEOUT=5
     CRIT_TIMEOUT=30
-    SEARCH_STRING=db-name
+    SEARCH_STRING=index_names
 
     while [ "$1" ] ; do
         case "$1" in
