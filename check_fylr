@@ -48,11 +48,8 @@ analyze_response(){ # process answer from fylr
         ERRORS="$ERRORS STATUS: ${HTTP_STATUS_LINE}!"
     fi
 
-    # analyze response content
-    # only look on the paragraph that starts with { and ends with }, each on their own lines.
-    CONTENT=`echo "$RESPONSE"|sed -n '/^[[:space:]]*{[[:space:]]*$/,/^[[:space:]]*}[[:space:]]*$/p'`
-    # is $SEARCH_STRING in there?!
-    if echo "$CONTENT" | grep -q "$SEARCH_STRING"; then
+    # is $SEARCH_STRING in the response?
+    if echo "$RESPONSE" | grep -qw "$SEARCH_STRING"; then
         NOTES="$NOTES Found $SEARCH_STRING in answer."
     else
         EXIT=2
