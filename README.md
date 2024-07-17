@@ -5,7 +5,9 @@ This is a Nagios plug-in which checks whether a fylr instance is up and respondi
 
 Needs a URL, as first command line argument.
 
-Recommended: Use the basic fylr front-end URL in your host configuration and append the API call /api/v1/settings to the URL in the Nagios server configuration. See below for a tested example.
+Recommended: 
+* Use the basic fylr front-end URL in your host configuration and
+* append the API call `/api/v1/settings` to the URL in the Nagios server configuration. See below for a tested example.
 
 ## optional input
 
